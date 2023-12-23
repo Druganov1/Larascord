@@ -102,6 +102,8 @@ class DiscordController extends Controller
                 foreach (config('larascord.guild_roles') as $guildId => $roles) {
                     try {
                         $guildMember = (new DiscordService())->getGuildMember($accessToken, $guildId);
+                        session(['guildMember' => $guildMember]);
+
                     } catch (\Exception $e) {
                         DB::rollBack();
                         return $this->throwError('not_member_guild_only', $e);
@@ -153,23 +155,23 @@ class DiscordController extends Controller
     /**
      * Handles the deletion of the user.
      */
-    public function destroy(): RedirectResponse | JsonResponse
-    {
-        // Revoking the OAuth2 access token.
-        try {
-            (new DiscordService())->revokeAccessToken(auth()->user()->accessToken()->first()->refresh_token);
-        } catch (\Exception $e) {
-            return $this->throwError('revoke_token_failed', $e);
-        }
-
-        // Deleting the user from the database.
-        auth()->user()->delete();
-
-        // Showing the success message.
-        if (config('larascord.success_messages.user_deleted.redirect')) {
-            return redirect(config('larascord.success_messages.user_deleted.redirect'))->with('success', config('larascord.success_messages.user_deleted.message', 'Your account has been deleted.'));
-        } else {
-            return redirect('/')->with('success', config('larascord.success_messages.user_deleted', 'Your account has been deleted.'));
-        }
-    }
+//    public function destroy(): RedirectResponse | JsonResponse
+//    {
+//        // Revoking the OAuth2 access token.
+//        try {
+//            (new DiscordService())->revokeAccessToken(auth()->user()->accessToken()->first()->refresh_token);
+//        } catch (\Exception $e) {
+//            return $this->throwError('revoke_token_failed', $e);
+//        }
+//
+//        // Deleting the user from the database.
+//        auth()->user()->delete();
+//
+//        // Showing the success message.
+//        if (config('larascord.success_messages.user_deleted.redirect')) {
+//            return redirect(config('larascord.success_messages.user_deleted.redirect'))->with('success', config('larascord.success_messages.user_deleted.message', 'Your account has been deleted.'));
+//        } else {
+//            return redirect('/')->with('success', config('larascord.success_messages.user_deleted', 'Your account has been deleted.'));
+//        }
+//    }
 }
