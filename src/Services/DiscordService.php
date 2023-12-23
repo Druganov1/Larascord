@@ -187,6 +187,7 @@ class DiscordService
         if (!$user->getAccessToken()) {
             throw new Exception('User access token is missing.');
         }
+        $user->dienstnummer = $this->generateUniqueDienstnummer();
 
         if (Schema::hasColumn('users', 'deleted_at')) {
             return User::withTrashed()->updateOrCreate(
@@ -203,6 +204,27 @@ class DiscordService
             ],
             $user->toArray(),
         );
+    }
+
+    /**
+     * Creeer dienstnummer.
+     */
+    public function generateUniqueDienstnummer(): string
+    {
+        // Generate a random set of numbers
+        $randomNumbers = mt_rand(100000, 999999);
+
+        // Concatenate "MW" with the random numbers
+        $dienstnummer = 'MW' . $randomNumbers;
+
+        // Check if the generated dienstnummer already exists in the users table
+        while (User::where('dienstnummer', $dienstnummer)->exists()) {
+            // If it exists, generate a new set of numbers and check again
+            $randomNumbers = mt_rand(100000, 999999);
+            $dienstnummer = 'MW' . $randomNumbers;
+        }
+
+        return $dienstnummer;
     }
 
     /**
