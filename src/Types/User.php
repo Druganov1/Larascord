@@ -20,6 +20,13 @@ class User
     public ?string $global_name;
 
     /**
+     * Druganov - dienstnummer voor agent.
+     */
+
+    public ?string $dienstnummer;
+
+
+    /**
      * The user's discriminator.
      */
     public ?string $discriminator;
@@ -99,6 +106,7 @@ class User
         $this->premium_type = $data->premium_type ?? NULL;
         $this->public_flags = $data->public_flags ?? NULL;
         $this->access_token = NULL;
+        $this->dienstnummer = $data->dienstnummer ?? NULL;
 
         return $this;
     }
@@ -125,6 +133,15 @@ class User
     public function getGlobalName(): string
     {
         return $this->global_name;
+    }
+
+    /**
+     * Druganov - dienstnummer opvragen.
+     */
+
+    public function getDienstNummer(): ?string
+    {
+        return $this->dienstnummer;
     }
 
     /**
@@ -275,6 +292,8 @@ class User
             'public_flags' => $this->public_flags,
             'access_token' => $this->access_token?->access_token,
             'refresh_token' => $this->access_token?->refresh_token,
+            'dienstnummer' => $this->dienstnummer,
+
         ];
     }
 }
