@@ -40,4 +40,4 @@ Route::group(['prefix' => config('larascord.route_prefix', 'larascord'), 'middle
         ->name('larascord.refresh_token');
 });
 
-Route::delete('/profile', [DiscordController::class, 'destroy'])->middleware(['web', 'auth', 'password.confirm'])->name('profile.destroy');
+// Route::delete('/profile', [DiscordController::class, 'destroy'])->middleware(['web', 'auth', 'password.confirm'])->name('profile.destroy');
