@@ -190,14 +190,9 @@ class DiscordService
         
         $existingUser = User::find($user->id);
         
-        if ($existingUser) {
-            // User already exists, use the existing dienstnummer
-            $user->dienstnummer = $existingUser->dienstnummer;
-        } else {
-            // User doesn't exist, generate a new dienstnummer
+        if (!$existingUser || !$existingUser->dienstnummer) {
             $user->dienstnummer = $this->generateUniqueDienstnummer();
         }
-
         if (Schema::hasColumn('users', 'deleted_at')) {
             return User::withTrashed()->updateOrCreate(
                 [
