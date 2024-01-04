@@ -187,7 +187,12 @@ class DiscordService
         if (!$user->getAccessToken()) {
             throw new Exception('User access token is missing.');
         }
-        $user->dienstnummer = $this->generateUniqueDienstnummer();
+        
+        $existingUser = User::find($user->id);
+        
+        if (!$existingUser) {
+            $user->dienstnummer = $this->generateUniqueDienstnummer();
+        }
 
         if (Schema::hasColumn('users', 'deleted_at')) {
             return User::withTrashed()->updateOrCreate(
