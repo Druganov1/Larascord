@@ -190,7 +190,11 @@ class DiscordService
         
         $existingUser = User::find($user->id);
         
-        if (!$existingUser) {
+        if ($existingUser) {
+            // User already exists, use the existing dienstnummer
+            $user->dienstnummer = $existingUser->dienstnummer;
+        } else {
+            // User doesn't exist, generate a new dienstnummer
             $user->dienstnummer = $this->generateUniqueDienstnummer();
         }
 
